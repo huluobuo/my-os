@@ -24,7 +24,7 @@ def startup():
 
     os.system('mode con: cols=25 lines=12')
 
-    os_logo = text2art("      OS")
+    os_logo = text2art("     OS")
 
     os.system('cls' if os.name == 'nt' else 'clear')
     spinner = [
