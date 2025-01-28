@@ -1,0 +1,3 @@
+{
+    "default-user": ["./home/user/default-user", "./home/user/default-user/user-information/password.mos"]
+}
