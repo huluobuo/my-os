@@ -1,5 +1,5 @@
-# wsh -> windows setup helper
+# mos -> my os
 
 ## List
 * | Name | Description |
-* | [systemisready.wsh](./systemisready.wsh) | 系统是否就绪 |
+* | [systemisready.mos](./systemisready.mos) | 系统是否就绪 |

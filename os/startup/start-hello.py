@@ -18,7 +18,7 @@ class Startup:
             检查是否准备就绪
         """
         try:
-            with open("./os/wsh/systemisready.wsh", "r") as f:
+            with open("./os/mos/systemisready.mos", "r") as f:
                 if f.read() == "True":
                     return True
                 else:
@@ -33,7 +33,7 @@ class Startup:
         os.system("cls")
         os.system("mode con: cols=90 lines=25")
         print("+------------------------------------------------+")
-        print("|                     Windows11                  |")
+        print("|                       My os                    |")
         print("|                  files checking...             |")
         print("|                              (C)huluobuo       |")
         print("+-----------------------------------------------+")

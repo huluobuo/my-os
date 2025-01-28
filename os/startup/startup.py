@@ -3,7 +3,7 @@ import os
 
 def check():
     try:
-        with open("./os/wsh/systemisready.wsh", "r") as f:
+        with open("./os/mos/systemisready.mos", "r") as f:
             if f.read() == "True":
                 return True
             else:
@@ -21,7 +21,7 @@ def startup():
 
     os.system('mode con: cols=30 lines=15')
 
-    windows_logo = """
+    os_logo = """
       _______   _______
      |       | |       |
      |       | |       |
@@ -82,7 +82,7 @@ def startup():
     run = True
     while run:
         for spin in spinner:
-            print_text = windows_logo + "\n" + spin
+            print_text = os_logo + "\n" + spin
             print(print_text, end="\r")
             time.sleep(0.1)
             if check():
@@ -95,5 +95,5 @@ if __name__ == "__main__":
     os.system("cls" if os.name == "nt" else "clear")
     print("正在等待一个终端任务...")
     time.sleep(1) # 怎么这么快
-    with open("./os/wsh/systemisready.wsh", "w") as f:         #为了下一次
+    with open("./os/mos/systemisready.mos", "w") as f:         #为了下一次
         f.write("False")
