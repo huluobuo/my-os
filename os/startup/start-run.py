@@ -16,3 +16,6 @@ time.sleep(waittime)
 
 with open("./os/mos/systemisready.mos", "w") as f:
     f.write("True")
+
+time.sleep(1)
+os.system("start .\\os\\steer\\user\\main.py" if os.name == "nt" else "python ./os/steer/user/main.py")
