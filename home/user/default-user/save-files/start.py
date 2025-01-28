@@ -26,6 +26,7 @@ class Functions():
 class System_commands():
     def __init__(self):
         functions = Functions()
+        self.f = functions
         self.where = os.getcwd()
         self.commands = {
             'ls': self.ls,
@@ -36,6 +37,7 @@ class System_commands():
             'rm': self.rm,
             'cat': self.cat,
             'echo': self.echo,
+            'run': self.run,
             'exit': self.exit,
             'help': self.help
             # 'get': functions.get   我干脆不用了！！
@@ -122,6 +124,14 @@ class System_commands():
             print(' '.join(args))
         else:
             print(f'[WARNG] {self.f.get_time()} echo命令需要参数')
+    
+    def run(self, args):
+        # 在终端运行命令
+        if args:
+            run_text = ' '.join(args)
+            os.system(run_text)
+        else:
+            print(f'[WARNG] {self.f.get_time()} run命令需要参数')
 
     def exit(self, args):
         # 退出程序
@@ -139,6 +149,7 @@ class System_commands():
             '\t-rm: 删除文件\n' +\
             '\t-cat: 查看文件内容\n' +\
             '\t-echo: 输出内容\n' +\
+            '\t-run: 在终端运行命令\n' +\
             '\t-exit: 退出程序\n' +\
             '\t-help: 查看帮助\n'
         )
