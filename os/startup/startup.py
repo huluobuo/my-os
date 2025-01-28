@@ -1,5 +1,8 @@
 import time
 import os
+from art import text2art
+
+
 
 def check():
     try:
@@ -19,19 +22,9 @@ def startup():
 
     """
 
-    os.system('mode con: cols=30 lines=15')
+    os.system('mode con: cols=25 lines=12')
 
-    os_logo = """
-      _______   _______
-     |       | |       |
-     |       | |       |
-     |_______| |_______|
-      _______   _______
-     |       | |       |
-     |       | |       |
-     |_______| |_______|
-
-    """
+    os_logo = text2art("      OS")
 
     os.system('cls' if os.name == 'nt' else 'clear')
     spinner = [
