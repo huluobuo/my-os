@@ -1,2 +1,4 @@
 cryptography
 art
+pillow
+numpy
