@@ -6,22 +6,29 @@ import datetime
 
 class Functions():
     """
-            辅助类，有些问题
-            get 函数有问题
+    辅助类，有些问题
+    get 函数有问题
     """
 
+    def __init__(self):
+        """没用的玩意"""
+        pass
+
     def get_time(self):
-            return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         
-    def get(self, args=['time']):   # 默认获取时间 
+    def get(self, args):   # 默认获取时间 
         """
-            获取XXX
-            正在维修中！！！
+        获取XXX
+        维修完毕！！！！！！！
         """
-        if args[0] == 'time':
-            print(self.f.get_time())
+        if args:
+            if args[0] == 'time':
+                print(self.get_time())
+            else:
+                print(f'[WARNG] {self.get_time()} 命令 "{args[0]}" 不存在')
         else:
-            print(f'[WARNG] {self.f.get_time()} get {args[0]}命令不存在')
+            print(f'[WARNG] {self.get_time()} get 命令需要参数')
 
 class System_commands():
     def __init__(self):
@@ -39,8 +46,8 @@ class System_commands():
             'echo': self.echo,
             'run': self.run,
             'exit': self.exit,
-            'help': self.help
-            # 'get': functions.get   我干脆不用了！！
+            'help': self.help,
+            'get': functions.get
         }
     
 
@@ -94,8 +101,9 @@ class System_commands():
             if os.path.exists(self.where + '/' + args[0]) == True:
                 print(f'[WARNG] {self.f.get_time()} {args[0]}文件已存在')
             else:
-                with open(self.where + args[0], 'w') as f:
+                with open(self.where + '/' + args[0], 'w') as f:
                     f.write('')
+                print(f'[INFO] {self.f.get_time()} {args[0]}文件已创建')
     
     def rm(self, args):
         # 删除文件
@@ -139,20 +147,22 @@ class System_commands():
         exit(0)
 
     def help(self, args):
-        print(
-            '可用命令：\n'
-            '\t-ls: 列出当前目录下files文件夹中的文件\n' +\
-            '\t-cd: 切换当前目录（注意！由于技术问题，请在输入参数时以 .\\file\\xxx 的格式输入）\n' +\
-            '\t-mkdir: 创建文件夹\n' +\
-            '\t-mdir: 删除文件夹\n' +\
-            '\t-touch: 创建文件\n' +\
-            '\t-rm: 删除文件\n' +\
-            '\t-cat: 查看文件内容\n' +\
-            '\t-echo: 输出内容\n' +\
-            '\t-run: 在终端运行命令\n' +\
-            '\t-exit: 退出程序\n' +\
-            '\t-help: 查看帮助\n'
-        )
+        print("""
+            可用命令：
+            \tls: 列出当前目录下的文件
+            \tcd <路径>: 切换当前目录
+            \tmkdir <文件夹名>: 创建文件夹
+            \trmdir <文件夹名>: 删除文件夹
+            \ttouch <文件名>: 创建文件
+            \trm <文件名>: 删除文件
+            \tcat <文件名>: 查看文件内容
+            \techo <内容>: 输出内容
+            \trun <命令>: 在终端运行命令
+            \tget <参数>: 获取系统信息
+            \t\tget time: 获取当前时间
+            \texit: 退出程序
+            \thelp: 查看帮助
+        """)
 
 
 def main():
@@ -160,12 +170,12 @@ def main():
     functions = Functions()
     while True:
         try:
-            command = input(f'{system_me.where} -+ ')
+            command = input(f'{system_me.where} ==+ ')
             command = command.split()
             if command[0] in system_me.commands:
                 system_me.commands[command[0]](command[1:])
             else:
-                print(f'[WARNG] {functions.get_time()} {command[0]}命令不存在')
+                print(f'[WARNG] {functions.get_time()} 命令 "{command[0]}" 不存在')
         except Exception as e:
             print(f'[ERROR] {functions.get_time()} 程序发生错误，已恢复。---错误代码：{e}')
 
