@@ -188,10 +188,10 @@ def main():
 if __name__ == '__main__':
     try:
         functions = Functions()
-        os.system("title My Os-V1.3")       # 就改了这点？
+        os.system("title My Os-V1.4")       # 就改了这点？
         os.system('color 0a')
         os.system('cls')
-        print('MY OS - V1.3')
+        print('MY OS - V1.4')
         print('版权所有  (C)   huluobuo 保留所有权利。')
         print('基于Windows的powershell，但好像缺了亿点点功能')
         print('我的GitHub：    https://github.com/huluobuo\n')

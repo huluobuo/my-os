@@ -2,3 +2,5 @@ cryptography
 art
 pillow
 numpy
+pygame
+psutil

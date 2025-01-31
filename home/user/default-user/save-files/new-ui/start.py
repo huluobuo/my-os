@@ -2,6 +2,7 @@ import os
 import datetime
 import pygame
 import sys
+import platform
 
 # 我只用一个文件！！
 
@@ -186,29 +187,37 @@ class GUI:
             self.height = 900
             self.screen = pygame.display.set_mode((self.width, self.height))
         elif size_choice == 3:
-            # 全屏模式
             screen_info = pygame.display.Info()
             self.width = screen_info.current_w
             self.height = screen_info.current_h
             self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
         
-        pygame.display.set_caption("My OS - V1.3")
+        pygame.display.set_caption("MY OS V1.5")
         
         # Colors
         self.BLACK = (0, 0, 0)
         self.GREEN = (0, 255, 0)
-        self.WHITE = (255, 255, 255)
+        self.BLUE = (0, 0, 255)
+        self.GRAY = (50, 50, 50)  # 更深的灰色作为背景
+        self.SILVER = (192, 192, 192)  # 银灰色用于分隔线
         
-        # Font - 缩小字体大小
+        # Font
         try:
-            self.font = pygame.font.Font("./os/fonts/SimHei.ttf", 16)  # 不是，这字体W*******
+            self.font = pygame.font.Font("./os/fonts/SimHei.ttf", 16)
         except:
             print("未找到中文字体，使用默认字体")
             self.font = pygame.font.Font(None, 24)
         
-        # 计算可显示的行数
-        self.line_height = 20  # 行高
-        self.visible_lines = (self.height - 50) // self.line_height  # 可显示的行数
+        # 布局设置
+        self.right_panel_width = int(self.width * 0.3)  # 右侧面板宽度为窗口宽度的30%
+        self.graph_height = 80  # 每个图表的高度
+        self.graph_spacing = 40  # 图表之间的间距
+        self.info_spacing = 30  # 信息文本之间的间距
+        self.graph_history = {'cpu': [], 'memory': []}
+        self.max_history = self.right_panel_width - 40
+        
+        # 命令行区域宽度
+        self.terminal_width = self.width - self.right_panel_width
         
         # 初始化所有需要的属性
         self.command_history = []
@@ -222,30 +231,126 @@ class GUI:
         self.system_commands = System_commands()
         self.functions = Functions()
 
+    def get_system_info(self):
+        import psutil
+        cpu_percent = psutil.cpu_percent()
+        memory = psutil.virtual_memory()
+        memory_percent = memory.percent
+        
+        # 更新历史数据
+        self.graph_history['cpu'].append(cpu_percent)
+        self.graph_history['memory'].append(memory_percent)
+        
+        # 保持固定长度
+        if len(self.graph_history['cpu']) > self.max_history:
+            self.graph_history['cpu'].pop(0)
+        if len(self.graph_history['memory']) > self.max_history:
+            self.graph_history['memory'].pop(0)
+        
+        return {
+            'memory_used': f"{memory.used / (1024**3):.1f}",
+            'memory_total': f"{memory.total / (1024**3):.1f}",
+            'os': platform.system(),
+            'os_version': platform.version(),
+            'cpu_model': platform.processor() or "Unknown CPU"
+        }
+
+    def draw_graph(self, data, rect, color):
+        if not data:
+            return
+            
+        # 绘制背景
+        pygame.draw.rect(self.screen, self.GRAY, rect)
+        
+        # 绘制图表
+        points = []
+        for i, value in enumerate(data):
+            x = rect[0] + (i * rect[2] / len(data))
+            y = rect[1] + rect[3] - (value * rect[3] / 100)
+            points.append((x, y))
+            
+        if len(points) > 1:
+            pygame.draw.lines(self.screen, color, False, points, 1)
+
     def draw(self):
         self.screen.fill(self.BLACK)
         
-        # Draw command history with proper text rendering
+        # 获取系统信息
+        sys_info = self.get_system_info()
+        
+        # 绘制右侧面板背景
+        right_panel = pygame.Rect(self.terminal_width, 0, self.right_panel_width, self.height)
+        pygame.draw.rect(self.screen, self.GRAY, right_panel)
+        
+        # 绘制CPU使用率图表
+        cpu_y = 20  # 增加顶部边距
+        cpu_rect = (self.terminal_width + 10, cpu_y, 
+                   self.right_panel_width - 20, self.graph_height)
+        self.draw_graph(self.graph_history['cpu'], cpu_rect, self.GREEN)
+        
+        # 绘制第一条分隔线
+        line1_y = cpu_y + self.graph_height + self.graph_spacing/2
+        pygame.draw.line(self.screen, self.SILVER,
+                        (self.terminal_width + 5, line1_y),
+                        (self.width - 5, line1_y))
+        
+        # 绘制内存使用率图表
+        mem_y = cpu_y + self.graph_height + self.graph_spacing
+        mem_rect = (self.terminal_width + 10, mem_y,
+                   self.right_panel_width - 20, self.graph_height)
+        self.draw_graph(self.graph_history['memory'], mem_rect, self.BLUE)
+        
+        # 绘制第二条分隔线
+        line2_y = mem_y + self.graph_height + self.graph_spacing/2
+        pygame.draw.line(self.screen, self.SILVER,
+                        (self.terminal_width + 5, line2_y),
+                        (self.width - 5, line2_y))
+        
+        # 绘制系统信息
+        info_start_y = mem_y + self.graph_height + self.graph_spacing
+        info_texts = [
+            f"当前内存使用情况：",
+            f"{sys_info['memory_used']} / {sys_info['memory_total']} GB",
+            "",  # 添加空行增加间距
+            f"当前操作系统：",
+            f"{sys_info['os']}",
+            "",  # 添加空行增加间距
+            f"当前操作系统版本：",
+            f"{sys_info['os_version']}",
+            "",  # 添加空行增加间距
+            f"CPU型号：",
+            f"{sys_info['cpu_model']}"
+        ]
+        
+        for i, text in enumerate(info_texts):
+            text_surface = self.font.render(text, True, self.GREEN)
+            self.screen.blit(text_surface, 
+                           (self.terminal_width + 10, info_start_y + i * self.info_spacing))
+        
+        # 绘制命令历史（在左侧区域）
+        visible_lines = (self.height - 50) // 20
+        visible_history = self.command_history[-visible_lines:]
+        
         y = 10
-        # 只显示最后 visible_lines 行
-        visible_history = self.command_history[-(self.visible_lines-1):]
         for cmd in visible_history:
             try:
-                # 使用 UTF-8 编码处理文本
                 if isinstance(cmd, bytes):
                     cmd = cmd.decode('utf-8')
                 text = self.font.render(str(cmd), True, self.GREEN)
+                # 确保文本不会超出左侧区域
+                if text.get_width() > self.terminal_width - 20:
+                    # 如果文本太长，截断显示
+                    text = self.font.render(str(cmd)[:50] + "...", True, self.GREEN)
                 self.screen.blit(text, (10, y))
-            except Exception as e:
-                # 如果渲染失败，尝试使用ASCII字符
+            except Exception:
                 try:
                     text = self.font.render(str(cmd).encode('ascii', 'replace').decode(), True, self.GREEN)
                     self.screen.blit(text, (10, y))
                 except:
-                    pass  # 如果还是失败，跳过这一行
-            y += self.line_height
+                    pass
+            y += 20
         
-        # Draw input line with proper text rendering
+        # 绘制输入行（在左侧区域底部）
         prompt = f"{self.system_commands.where} ==+ "
         try:
             prompt_text = self.font.render(prompt, True, self.GREEN)
@@ -257,7 +362,6 @@ class GUI:
         self.screen.blit(prompt_text, (10, self.height - 40))
         self.screen.blit(input_surface, (prompt_text.get_width() + 10, self.height - 40))
         
-        # Draw cursor
         if self.cursor_visible:
             cursor_pos = prompt_text.get_width() + input_surface.get_width() + 12
             pygame.draw.line(self.screen, self.GREEN,
@@ -355,7 +459,7 @@ def main():
     
     gui = GUI(choice)
     gui.command_history.extend([
-        'MY OS - V1.3',
+        'MY OS - V1.5',
         '版权所有  (C)   huluobuo 保留所有权利。',
         '基于Pygame的GUI界面',
         '我的GitHub：    https://github.com/huluobuo',
