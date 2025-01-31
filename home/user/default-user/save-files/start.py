@@ -47,7 +47,8 @@ class System_commands():
             'run': self.run,
             'exit': self.exit,
             'help': self.help,
-            'get': functions.get
+            'get': functions.get,
+            'try_new': self.try_new
         }
     
 
@@ -141,6 +142,9 @@ class System_commands():
         else:
             print(f'[WARNG] {self.f.get_time()} run命令需要参数')
 
+    def try_new():
+        os.system("python .\home\user\default-user\save-files\new-ui\start.py" if os.name == 'nt' else "python .\home\user\default-user\save-files\new-ui\start.py")
+
     def exit(self, args):
         # 退出程序
         print(f'[INFO] {self.f.get_time()} 程序已退出')
@@ -160,6 +164,7 @@ class System_commands():
             \trun <命令>: 在终端运行命令
             \tget <参数>: 获取系统信息
             \t\tget time: 获取当前时间
+            \ttry_new: 尝试新UI
             \texit: 退出程序
             \thelp: 查看帮助
         """)
@@ -191,6 +196,7 @@ if __name__ == '__main__':
         print('基于Windows的powershell，但好像缺了亿点点功能')
         print('我的GitHub：    https://github.com/huluobuo\n')
         print('注意！由于技术问题，请在输入参数时以完整路径或合理的的相对路径格式输入')
+        print('输入try_new尝试新UI')
         print('输入help查看可用命令\n')
         main()
     except KeyboardInterrupt:
