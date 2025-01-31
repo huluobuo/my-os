@@ -142,8 +142,8 @@ class System_commands():
         else:
             print(f'[WARNG] {self.f.get_time()} run命令需要参数')
 
-    def try_new():
-        os.system("python .\home\user\default-user\save-files\new-ui\start.py" if os.name == 'nt' else "python .\home\user\default-user\save-files\new-ui\start.py")
+    def try_new(self, args):
+        os.system("python .\\home\\user\\default-user\\save-files\\new-ui\\start.py" if os.name == 'nt' else "python ./home/user/default-user/save-files/new-ui/start.py")
 
     def exit(self, args):
         # 退出程序
@@ -196,7 +196,7 @@ if __name__ == '__main__':
         print('基于Windows的powershell，但好像缺了亿点点功能')
         print('我的GitHub：    https://github.com/huluobuo\n')
         print('注意！由于技术问题，请在输入参数时以完整路径或合理的的相对路径格式输入')
-        print('输入try_new尝试新UI')
+        print('输入try_new尝试新UI（MyyOs-V1.5）')
         print('输入help查看可用命令\n')
         main()
     except KeyboardInterrupt:
