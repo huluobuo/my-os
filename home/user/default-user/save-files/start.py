@@ -120,7 +120,7 @@ class System_commands():
         # 查看文件内容
         if args:
             try:
-                with open(self.where + '/' + args[0], 'r') as f:
+                with open(self.where + '/' + args[0], 'r', encoding="UTF-8") as f:
                     print(f.read())
             except:
                 print(f'[WARNG] {self.f.get_time()} {args[0]}文件不存在')
