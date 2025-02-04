@@ -50,6 +50,9 @@ class Game():
                 self.set_boom_max_and_min()
             else:
                 self.set_boom_num()
+            if self.boom_max - self.boom_min < 2:
+                print('最大值和最小值差距不能小于2，请重新输入！')
+                self.set_boom_max_and_min()
         except ValueError:
             print('输入错误，请重新输入！')
             self.set_boom_max_and_min()
@@ -58,7 +61,7 @@ class Game():
         """
             设置炸弹数字
         """
-        self.boom_num = random.randint(self.boom_min, self.boom_max)
+        self.boom_num = random.randint(self.boom_min + 1, self.boom_max - 1)
         self.boom_num_max = self.boom_max
         self.boom_num_min = self.boom_min
 
