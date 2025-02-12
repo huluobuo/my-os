@@ -1,4 +1,4 @@
-import os
+from os import system
 import random
 
 
@@ -167,7 +167,7 @@ class Game():
 
 
 def main():
-    os.system('cls')
+    system('cls')
     game = Game()
     game.run()
 
