@@ -117,7 +117,7 @@ class FileManager(tk.Tk):
             selected_file = self.file_listbox.get(selected_index)
             path = os.path.join(self.path_entry.get() or os.getcwd(), selected_file)
             if os.path.isfile(path):
-                with open(path, 'r') as file:
+                with open(path, 'r') as file:    ############
                     content = file.read()
                     self.file_content_text.delete(1.0, tk.END)
                     self.file_content_text.insert(tk.END, content)
