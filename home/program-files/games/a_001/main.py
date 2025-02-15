@@ -93,7 +93,10 @@ class Game():
         """
             电脑数字
         """
-        self.computer_num = random.randint(self.boom_num_min + 1, self.boom_num_max - 1)
+        if self.boom_num_max - self.boom_num_min == 2:
+            self.computer_num = self.boom_num_max - 1  # 哈哈哈 我真聪明
+        else:
+            self.computer_num = random.randint(self.boom_num_min + 1, self.boom_num_max - 1)
         self.check_number('computer')
     
     def restart(self):
