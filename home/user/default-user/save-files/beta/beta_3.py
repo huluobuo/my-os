@@ -2,7 +2,6 @@ import os
 import datetime
 import keyboard
 import time
-import json
 
 
 class Bios():  # 想不出这么写~~~
@@ -12,14 +11,15 @@ class Bios():  # 想不出这么写~~~
             system = System_commands()
             print('done\n正在启动用户界面········',  end='')
             show = Show(system)
-            print('done\n开启用户端界面········')
+            print('done\n开启用户端界面---')
             time.sleep(0.5)
             show.desktop()
         
     def load_bios(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
         print('+--------------------------------------------------+')
         print('|                     OS 信息                      |')
-        print('| 版本：V1.6                                       |')
+        print('| 版本：V1.7(beta)                                 |')
         print('| 作者：huluobuo                                   |')
         print('| 版权所有 (C)  huluobuo 保留所有权利。            |')
         print('+--------------------------------------------------+')
@@ -77,6 +77,7 @@ class System_commands():
             'touch': self.touch,
             'rm': self.rm,
             'cat': self.cat,
+            "get": self.f.get,
             'run': self.run,
             'new_run': self.new_run,
             'old_run': self.old_run,
@@ -231,27 +232,26 @@ class Show():
         """主界面"""
         os.system('cls')
         print_text = (f"""
-                     __  __           ___   ____
-                    |  \/  | _   _   / _ \ / ___|
-                    | |\/| || | | | | | | |\___ \\
-                    | |  | || |_| | | |_| | ___) |
-                    |_|  |_| \__, |  \___/ |____/
-                             |___/
+                                             __  __           ___   ____
+                                            |  \/  | _   _   / _ \ / ___|
+                                            | |\/| || | | | | | | |\___ \\
+                                            | |  | || |_| | | |_| | ___) |
+                                            |_|  |_| \__, |  \___/ |____/
+                                                      |___/
 
-              - 当前位置： {self.system.where}
-              - 当前版本： V1.6
-                当前支持的功能：
+                    - 当前位置： {self.system.where}
+                    - 当前版本： V1.7(beta)
         """)
         
         # 获取所有命令并格式化显示
         print_text += "\n"
-        commands = ["查看所有文件", "切换目录", "创建文件夹", "删除文件夹 ", "创建文件", "删除文件", "查看文件内容", "运行命令", "使用最新系统", "老式终端"]
+        commands = ["查看所有文件", "切换目录", "创建文件夹", "删除文件夹 ", "创建文件", "删除文件", "查看文件内容", "获取信息", "运行命令", "新式终端", "老式终端"]
         for i, command in enumerate(commands):
             if i == self.choosing:
                 print_text += f"> {command.ljust(15)}  |"
             else:
                 print_text += f"  {command.ljust(15)}  |"
-            if (i + 1) % 3 == 0:
+            if (i + 1) % 5 == 0:
                 print_text += '\n'
         print_text += "\n\n使用左右箭头键切换选项，按回车键执行。按 Q 退出。"
         if not self.show_start:
@@ -274,11 +274,11 @@ class Show():
                     self.update_ui()
                     break
                 elif keyboard.is_pressed('up'):
-                    self.choosing = (self.choosing - 3) % len(commands)
+                    self.choosing = (self.choosing - 5) % len(commands)
                     self.update_ui()
                     break
                 elif keyboard.is_pressed('down'):
-                    self.choosing = (self.choosing + 3) % len(commands)
+                    self.choosing = (self.choosing + 5) % len(commands)
                     self.update_ui()
                     break
                 elif keyboard.is_pressed('enter'):
@@ -288,8 +288,12 @@ class Show():
                 elif keyboard.is_pressed('q'):
                     self.system.commands['exit']()
                     break
+            except KeyboardInterrupt:
+                self.system.commands['exit']()
+                break
             except Exception as e:
                 print(f"发生错误：{e}")
+                break # 以防万一
 
 
 def main():
