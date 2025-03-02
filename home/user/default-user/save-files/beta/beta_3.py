@@ -11,7 +11,7 @@ class Bios():  # 想不出这么写~~~
             system = System_commands()
             print('done\n正在启动用户界面········',  end='')
             show = Show(system)
-            print('done\n开启用户端界面---')
+            print('done\n开启用户端界面········')
             time.sleep(0.5)
             show.desktop()
         
