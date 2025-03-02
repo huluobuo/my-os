@@ -2,6 +2,7 @@ import os
 import datetime
 import keyboard
 import time
+from art import text2art
 
 
 class Bios():  # 想不出这么写~~~
@@ -192,13 +193,7 @@ class System_commands():
     def exit(self):
         # 退出程序
         os.system('cls')
-        print("""
- _____  _                 _          __                       _
-|_   _|| |_   __ _  _ _  | |__ ___  / _| ___  _ _   _  _  ___(_) _ _   __ _
-  | |  | ' \ / _` || ' \ | / /(_-< |  _|/ _ \| '_| | || |(_-<| || ' \ / _` |
-  |_|  |_||_|\__,_||_||_||_\_\/__/ |_|  \___/|_|    \_,_|/__/|_||_||_|\__, |
-                                                                      |___/
-""")
+        print(text2art("Thanks for using", font='small'))
         exit(0)
 
 
@@ -237,7 +232,7 @@ class Show():
                                             | |\/| || | | | | | | |\___ \\
                                             | |  | || |_| | | |_| | ___) |
                                             |_|  |_| \__, |  \___/ |____/
-                                                      |___/
+                                                     |___/
 
                     - 当前位置： {self.system.where}
                     - 当前版本： V1.7(beta)
