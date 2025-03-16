@@ -76,7 +76,7 @@ class System_commands():
             'rmdir': self.rmdir,
             'touch': self.touch,
             'rm': self.rm,
-            'cat': self.cat,
+            'file': self.file,
             'run': self.run,
             'new_run': self.new_run,
             'old_run': self.old_run,
@@ -181,7 +181,7 @@ class System_commands():
         # 修改或读取文件内容
         while True:
             try:
-                _class = int(input('1. 清除所有文本并写入文本\n2. 在文件末尾插入文本\n3. 读取文件\n\t请输入操作（1/2）：'))
+                _class = int(input('1. 清除所有文本并写入文本\n2. 在文件末尾插入文本\n3. 读取文件\n\n请输入操作（1/2/3）：'))
                 _file = input('\n清输入文件名：')
             except Exception as e:
                 print(f'你的输入有误，错误代码：{e}，请重新输入！')
@@ -199,7 +199,7 @@ class System_commands():
                     line_number = 1  # 行数
                     running = True
                     while running:
-                        input_text = input(f'| {line_number.ljust(5)} |')  # 这个够了吧~~~
+                        input_text = input(f'| {str(line_number).ljust(5)} |')  # 这个够了吧~~~
                         if input_text == '#!!!#-sys-stop-input-#!!!#':
                             print('-----分界线-----')
                             running = False
@@ -210,7 +210,7 @@ class System_commands():
                     line_number = 1
                     print('正在写入文本')
                     for write_text in write_list:
-                        print(f'正在写入第| {line_number.ljust(5)} |行', end='\r')
+                        print(f'正在写入第| {str(line_number).ljust(5)} |行', end='\r')
                         f.write(write_text)
                         line_number += 1
                 print('Done!')
@@ -218,8 +218,8 @@ class System_commands():
                 with open(_file, 'r', encoding='UTF-8') as f:
                     print('文件内容：\n-----分界线-----')
                     line_number = 1
-                    for read_text in f.read():
-                        print(f'| {line_number.ljust(5)} |{read_text}', end='')
+                    for read_text in f.read().split('\n'):
+                        print(f'| {str(line_number).ljust(5)} |{read_text}')
                         line_number += 1
                     help_line_number = line_number
                     print('-----分界线-----')
@@ -228,7 +228,7 @@ class System_commands():
                     write_list = []
                     running = True
                     while running:
-                        input_text = input(f'| {line_number.ljust(5)} |')
+                        input_text = input(f'| {str(line_number).ljust(5)} |')
                         if input_text == '#!!!#-sys-stop-input-#!!!#':
                             print('-----分界线-----')
                             running = False
@@ -239,7 +239,7 @@ class System_commands():
                     line_number = help_line_number
                     print('正在写入文本')
                     for write_text in write_list:
-                        print(f'正在写入第| {line_number.ljust(5)} |行', end='\r')
+                        print(f'正在写入第| {str(line_number).ljust(5)} |行', end='\r')
                         f.write(write_text)
                         line_number += 1
                 print('Done!')
@@ -247,8 +247,8 @@ class System_commands():
                 with open(_file, 'r', encoding='UTF-8') as f:
                     print('文件内容：\n-----分界线-----')
                     line_number = 1
-                    for read_text in f.read():
-                        print(f'| {line_number.ljust(5)} |{read_text}', end='')
+                    for read_text in f.read().split('\n'):
+                        print(f'| {str(line_number).ljust(5)} |{read_text}')
                         line_number += 1
                     print('-----分界线-----')
                 print('Done!')
@@ -328,7 +328,7 @@ class Show():
         
         # 获取所有命令并格式化显示
         print_text += "\n"
-        commands = ["查看所有文件", "切换目录", "创建文件夹", "删除文件夹", "创建文件", "删除文件", "查看文件内容", "运行命令", "使用测试版系统", "使用老式系统"]
+        commands = ["查看所有文件", "切换目录", "创建文件夹", "删除文件夹", "创建文件", "删除文件", "文件操作", "运行命令", "使用测试版系统", "使用老式系统"]
         for i, command in enumerate(commands):
             if i == self.choosing:
                 print_text += f"> {command.ljust(15)}  |"
