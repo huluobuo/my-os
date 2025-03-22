@@ -2,24 +2,18 @@ import os
 import datetime
 import keyboard
 import time
-import json
 
 
 class Bios():  # 想不出这么写~~~
     """BIOS"""
     def load_system(self):
-            print('正在启动系统核心程序········',  end='')
-            system = System_commands()
-            print('done\n正在启动用户界面········',  end='')
-            show = Show(system)
-            print('done\n开启用户端界面········')
-            time.sleep(0.5)
-            show.desktop()
+        show = Show(System_commands())
+        show.desktop()
         
     def load_bios(self):
         print('+--------------------------------------------------+')
         print('|                     OS 信息                      |')
-        print('| 版本：V 1.7(beta)                                |')
+        print('| 版本：V 1.7                                      |')
         print('| 作者：huluobuo                                   |')
         print('| 版权所有 (C)  huluobuo 保留所有权利。            |')
         print('+--------------------------------------------------+')
@@ -36,14 +30,27 @@ class Bios():  # 想不出这么写~~~
             if keyboard.is_pressed('delete'):
                 self.load_bios()
             elif time.time() - start_time >= 3:
+                os.system('cls' if os.name == 'nt' else 'clear')
                 self.load_system()
             print(f'当前剩余时间： {int(3 - (time.time() - start_time))}', end='\r')
 
 
-class Functions():
+class System_commands():
     def __init__(self):
-        """没用的玩意"""
-        pass
+        self.where = os.getcwd()
+        self.commands = {
+            'ls': self.ls,
+            'cd': self.cd,
+            'mkdir': self.mkdir,
+            'rmdir': self.rmdir,
+            'touch': self.touch,
+            'rm': self.rm,
+            'file': self.file,
+            'run': self.run,
+            'clean': self.clean,
+            'exit': self.exit,
+            'get': self.get
+        }
 
     def get_time(self):
         return datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -65,26 +72,6 @@ class Functions():
         else:
             print('获取失败，请检查输入是否正确')
 
-class System_commands():
-    def __init__(self):
-        self.f = Functions()
-        self.where = os.getcwd()
-        self.commands = {
-            'ls': self.ls,
-            'cd': self.cd,
-            'mkdir': self.mkdir,
-            'rmdir': self.rmdir,
-            'touch': self.touch,
-            'rm': self.rm,
-            'file': self.file,
-            'run': self.run,
-            'new_run': self.new_run,
-            'old_run': self.old_run,
-            'exit': self.exit
-
-        }
-    
-
     def ls(self):
         # 列出当前目录下files文件夹中的文件
         files = os.listdir(self.where)
@@ -98,10 +85,16 @@ class System_commands():
         try:
             if os.name == 'nt' and ':\\' in change_path:     # 检测是否为完整路径·····Linux和MacOS暂不支持
                 os.chdir(change_path)
+                self.where = change_path  # 更新当前路径
                 print('目录已切换')
             else:
-                self.where = self.where + '/' + change_path
-                print('目录已切换')
+                new_path = os.path.join(self.where, change_path)
+                if os.path.exists(new_path) and os.path.isdir(new_path):
+                    os.chdir(new_path)
+                    self.where = new_path
+                    print('目录已切换')
+                else:
+                    print('目录不存在或不是有效的目录')
         except Exception as e:
             print(f'发生未知错误，错误代码：{e}')
     
@@ -151,13 +144,19 @@ class System_commands():
         file_name = input('请输入要删除的文件名：')
         try:
             if os.name == 'nt' and ':\\' in file_name:
-                os.remove(file_name)
-                print('文件已删除')
+                target_path = file_name
             else:
-                os.remove(self.where + '/' + file_name)
-                print('文件已删除')
-        except FileNotFoundError:
-            print(f'错误！文件不存在，请检查文件名是否正确')
+                target_path = os.path.join(self.where, file_name)
+            
+            if os.path.exists(target_path):
+                confirm = input(f'确定要删除文件 {file_name} 吗？(y/n): ')
+                if confirm.lower() == 'y':
+                    os.remove(target_path)
+                    print('文件已删除')
+                else:
+                    print('操作已取消')
+            else:
+                print(f'错误！文件不存在，请检查文件名是否正确')
         except Exception as e:
             print(f'发生未知错误，错误代码：{e}')
 
@@ -194,7 +193,7 @@ class System_commands():
         try:
             if _class == 1:  # 清除并写入
                 with open(_file, 'w', encoding='UTF-8') as f:
-                    print('请输入文件内容，输入“#!!!#-sys-stop-input-#!!!#”以停止输入\n-----分界线-----')
+                    print('请输入文件内容，输入"#!!!#-sys-stop-input-#!!!#"以停止输入\n-----分界线-----')
                     write_list = []
                     line_number = 1  # 行数
                     running = True
@@ -224,7 +223,7 @@ class System_commands():
                     help_line_number = line_number
                     print('-----分界线-----')
                 with open(_file, 'a', encoding='UTF-8') as f:  # 直接搬过来~~~~~~~~~~~~~~~~~~~
-                    print('请输入文件内容，输入“#!!!#-sys-stop-input-#!!!#”以停止输入\n-----分界线-----')
+                    print('请输入文件内容，输入"#!!!#-sys-stop-input-#!!!#"以停止输入\n-----分界线-----')
                     write_list = []
                     running = True
                     while running:
@@ -264,11 +263,13 @@ class System_commands():
         return_num = os.system(run_command)
         print(f'运行结束，终止代码为：{return_num}')
     
-    def new_run(self):
-        os.system('python .\\home\\user\\default-user\\save-files\\beta\\start.py' if os.name == 'nt' else 'python3 ./home/user/default-user/save-files/beta/start.py')  # 我就写一下，能不能运行，取决于你
-
-    def old_run(self):
-        os.system('python .\\home\\user\\default-user\\save-files\\old-ui\\start.py' if os.name == 'nt' else 'python3 ./home/user/default-user/save-files/old-ui/start.py')  # 我就写一下，能不能运行，取决于你
+    def clean(self):
+        # 刷新系统
+        os.system('cls' if os.name == 'nt' else 'clear')
+        # 重新启动
+        time.sleep(0.5)
+        bios = Bios()
+        bios.load_system()
     
     def exit(self):
         # 退出程序
@@ -290,80 +291,78 @@ class Show():
         self.system = system
         self.choosing = 0  # 当前所选功能
         self.show_start = False
+        self.commands = ["文件列表", "目录切换", "新建目录", "删除目录", "新建文件", "删除文件", "文件编辑", "命令执行", "刷新系统"]
 
     def run_command(self):
         """运行对应命令"""
-        #a = input()   # 说实话，Keyboard 让人头疼~
         os.system('cls')
         self.system.commands[list(self.system.commands.keys())[self.choosing]]()
         time.sleep(1)
         print('\n按回车键继续...', end='')
         a = input()
         time.sleep(0.3)
-        self.desktop()
+        self.show_desktop()
 
-
-    def update_ui(self):
-        """刷新界面，显示当前所选功能，在按上下左右按键时执行"""
-        time.sleep(0.1)
-        os.system('cls')
-        self.desktop()
-
-
-    def desktop(self):
-        """主界面"""
-        os.system('cls')
-        print_text = (f"""
-                     __  __           ___   ____
-                    |  \/  | _   _   / _ \ / ___|
-                    | |\/| || | | | | | | |\___ \\
-                    | |  | || |_| | | |_| | ___) |
-                    |_|  |_| \__, |  \___/ |____/
-                             |___/
-
-              - 当前位置： {self.system.where}
-              - 当前版本： V 1.7(beta)
-                当前支持的功能：
+    def show_desktop(self):
+        """显示主界面"""
+        print_text = (f"""                                                                                                                           
+                         __  __           ___   ____
+                        |  \/  | _   _   / _ \ / ___|                                                             
+                        | |\/| || | | | | | | |\___ \\                                                          
+                        | |  | || |_| | | |_| | ___) |                                                           
+                        |_|  |_| \__, |  \___/ |____/                                                            
+                                 |___/                                                                      
+                                                                                                 
+                  +------------------------------------------------+                                                       
+                  |  当前位置： {self.system.where}                                                                         
+                  |  当前版本： V 1.7                                                          
+                  +------------------------------------------------+                                             
+                    系统功能菜单：                                                              
         """)
         
         # 获取所有命令并格式化显示
         print_text += "\n"
-        commands = ["查看所有文件", "切换目录", "创建文件夹", "删除文件夹", "创建文件", "删除文件", "文件操作", "运行命令", "使用测试版系统", "使用老式系统"]
-        for i, command in enumerate(commands):
+        for i, command in enumerate(self.commands):
             if i == self.choosing:
-                print_text += f"> {command.ljust(15)}  |"
+                print_text += f"-[{command}]-".center(20)
             else:
-                print_text += f"  {command.ljust(15)}  |"
-            if (i + 1) % 3 == 0:
-                print_text += '\n'
-        print_text += "\n\n使用左右箭头键切换选项，按回车键执行。按 Q 退出。"
-        if not self.show_start:
-            for pt in print_text:  # 是不是很6？
-                print(pt, end='', flush=True)
-                time.sleep(0.01)
-            self.show_start = True
-        else:
-            print(print_text, end='')
+                print_text += f" {command} ".center(20)
+            if (i + 1) % 4 == 0:
+                print_text += '\n\n'
+        
+        print_text += "\n" + "="*80 + "\n"
+        print_text += "操作说明:".center(80) + "\n"
+        print_text += "← → ↑ ↓ : 切换选项   |   Enter : 执行   |   Q : 退出系统                                       ".center(80)
+        print_text += "\n" + "="*80
+
+        # 使用\033[H将光标移到开头,而不是清屏
+        print('\033[H', end='')
+        
+        print(print_text, end='')
+
+    def desktop(self):
+        """主界面"""
+        self.show_desktop()
         
         # 捕获键盘输入以切换选项或执行命令
         while True:
             try:
                 if keyboard.is_pressed('right'):
-                    self.choosing = (self.choosing + 1) % len(commands)  # 切换到下一个选项，在到头时回到第一个选项
-                    self.update_ui()
-                    break
+                    self.choosing = (self.choosing + 1) % len(self.commands)
+                    self.show_desktop()
+                    time.sleep(0.1)
                 elif keyboard.is_pressed('left'):
-                    self.choosing = (self.choosing - 1) % len(commands)
-                    self.update_ui()
-                    break
+                    self.choosing = (self.choosing - 1) % len(self.commands)
+                    self.show_desktop()
+                    time.sleep(0.1)
                 elif keyboard.is_pressed('up'):
-                    self.choosing = (self.choosing - 3) % len(commands)
-                    self.update_ui()
-                    break
+                    self.choosing = (self.choosing - 4) % len(self.commands)
+                    self.show_desktop()
+                    time.sleep(0.1)
                 elif keyboard.is_pressed('down'):
-                    self.choosing = (self.choosing + 3) % len(commands)
-                    self.update_ui()
-                    break
+                    self.choosing = (self.choosing + 4) % len(self.commands)
+                    self.show_desktop()
+                    time.sleep(0.1)
                 elif keyboard.is_pressed('enter'):
                     a = input()
                     self.run_command()
@@ -373,12 +372,15 @@ class Show():
                     break
             except Exception as e:
                 print(f"发生错误：{e}")
-
-
+                exit()
 def main():
     os = Bios()
     os.main_show()
     
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f'发生未知错误，错误代码：{e}')
+        exit()
