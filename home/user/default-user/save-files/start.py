@@ -60,11 +60,10 @@ class System_commands():
         获取XXX
         维修完毕！！！！！！！
         """
-        print(
-"""
-当前支持的可以获取的信息：
-\t\t时间 --- time
-"""
+        print("""
+                当前支持的可以获取的信息：
+                \t\t时间 --- time
+              """
         )
         get_thing_name = input('请输入要获取的信息：')
         if get_thing_name == 'time':
@@ -299,26 +298,19 @@ class Show():
         self.system.commands[list(self.system.commands.keys())[self.choosing]]()
         time.sleep(1)
         print('\n按回车键继续...', end='')
-        a = input()
+        input()
         time.sleep(0.3)
         self.show_desktop()
 
     def show_desktop(self):
         """显示主界面"""
-        print_text = (f"""                                                                                                                           
-                         __  __           ___   ____
-                        |  \/  | _   _   / _ \ / ___|                                                             
-                        | |\/| || | | | | | | |\___ \\                                                          
-                        | |  | || |_| | | |_| | ___) |                                                           
-                        |_|  |_| \__, |  \___/ |____/                                                            
-                                 |___/                                                                      
-                                                                                                 
-                  +------------------------------------------------+                                                       
-                  |  当前位置： {self.system.where}                                                                         
-                  |  当前版本： V 1.7                                                          
-                  +------------------------------------------------+                                             
-                    系统功能菜单：                                                              
-        """)
+        print_text = (f"""
+                  +------------------------------------------------+
+                  |  当前位置： {self.system.where.ljust(30)}     |
+                  |  当前版本： V 1.7                              |
+                  +------------------------------------------------+
+                    系统功能菜单：
+                        """)
         
         # 获取所有命令并格式化显示
         print_text += "\n"
@@ -332,7 +324,7 @@ class Show():
         
         print_text += "\n" + "="*80 + "\n"
         print_text += "操作说明:".center(80) + "\n"
-        print_text += "← → ↑ ↓ : 切换选项   |   Enter : 执行   |   Q : 退出系统                                       ".center(80)
+        print_text += "← → ↑ ↓ : 切换选项   |   Enter : 执行   |   Q : 退出系统".center(80)
         print_text += "\n" + "="*80
 
         # 使用\033[H将光标移到开头,而不是清屏
