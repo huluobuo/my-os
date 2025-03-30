@@ -13,16 +13,7 @@ def check_dependencies():
         sys.exit(1)
 
 def start_application():
-    startup_script = ".\\os\\steer\\user\\main.py" if os.name == "nt" else "./os/steer/user/main.py"
-    try:
-        if os.name == "nt":
-            os.startfile(startup_script)
-        else:
-            subprocess.Popen([sys.executable, startup_script])
-        print("应用程序启动成功！")
-    except Exception as e:
-        print(f"错误：应用程序启动失败！\n{e}")
-        sys.exit(1)
+    os.system("python .\\os\\steer\\user\\main.py") if os.name == "nt" else os.system("python3 ./os/steer/user/main.py")
 
 def main():
     print("欢迎使用OS\n\t请确保你的电脑有至少100MB的空余内存")

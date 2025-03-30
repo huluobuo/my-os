@@ -42,7 +42,6 @@ class Steer():
         self.load_users_information()
         os.system("title 登录")
         os.system("cls" if os.name == "nt" else "clear")
-        os.system("color D1")
         os.system("mode con: cols=60 lines=15")
         print("+----------------------------------------------------------+")
         print("|                            登录                          |")
@@ -67,12 +66,11 @@ class Steer():
                     print("登录成功，即将启动。")
                     login_flag = True
                 else:
-                    os.system("cls" if os.name == "nt" else "clear")
                     print("登录失败，请重新登录。")
         
         print("正在引导启动")
         os.system("cd " + self.user_path[number - 1])
-        os.system(("start .\\home\\user\\" + self.user_name[number - 1] + "\\save-files\\start.py") if os.name == "nt" else "python3 " + "./home/user/" + self.user_name[number - 1] + "/save-files/start.py")
+        os.system(("python .\\home\\user\\" + self.user_name[number - 1] + "\\save-files\\start.py") if os.name == "nt" else "python3 " + "./home/user/" + self.user_name[number - 1] + "/save-files/start.py")
 
 if __name__ == "__main__":
     steer = Steer()

@@ -14,7 +14,7 @@ class Bios():  # 想不出这么写~~~
     def load_bios(self):
         print('+--------------------------------------------------+')
         print('|                     OS 信息                      |')
-        print('| 版本：V 1.8                                      |')
+        print('| 版本：V 1.7                                      |')
         print('| 作者：huluobuo                                   |')
         print('| 版权所有 (C)  huluobuo 保留所有权利。            |')
         print('+--------------------------------------------------+')
@@ -41,7 +41,11 @@ class System_commands():
         self.where = os.getcwd()
         self.commands = {
             'ls': self.ls,
-            'folder': self.folder,
+            'cd': self.cd,
+            'mkdir': self.mkdir,
+            'rmdir': self.rmdir,
+            'touch': self.touch,
+            'rm': self.rm,
             'file': self.file,
             'run': self.run,
             'clean': self.clean,
@@ -66,85 +70,111 @@ class System_commands():
         if get_thing_name == 'time':
             print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
         else:
-            print('\a获取失败，请检查输入是否正确')
+            print('获取失败，请检查输入是否正确')
 
     def ls(self):
-        # 列出当前目录下files目录中的文件
+        # 列出当前目录下files文件夹中的文件
         files = os.listdir(self.where)
         print(f'{self.where}下的文件有：')
         for file in files:
             print('\t' + file)
-    
-    def folder(self):
-        # 目录操作
-        while True:
-            try:
-                _class = int(input('1. 新建目录\n2. 删除目录\n3. 切换目录\n\n请输入操作（1/2/3）：'))
-            except Exception as e:
-                print(f'\a你的输入有误，错误代码：{e}，请重新输入！')
-            else:
-                if _class in [1, 2, 3]:
-                    break
-                else:
-                    print('\a你的输入有误，请重新输入！')
-        # 操作
+
+    def cd(self):
+        # 切换当前目录
+        change_path = input('请输入要切换的目录：')
         try:
-            if _class == 1:  # 新建目录
-                # 创建目录
-                folder_name = input('请输入要创建的目录名：')
-                try:
-                    if os.name == 'nt' and ':\\' in folder_name:
-                        # 检查目录是否存在
-                        if os.path.exists(folder_name):
-                            print('\a目录已存在')
-                            pass
-                        else:
-                            os.mkdir(folder_name)
-                            print('目录已创建')
-                    else:
-                        # 检查目录是否存在
-                        if os.path.exists(self.where + '/' + folder_name):
-                            print('\a目录已存在')
-                            pass
-                        else:
-                            os.mkdir(self.where + '/' + folder_name)
-                            print('目录已创建')
-                except Exception as e:
-                    print(f'\a发生未知错误，错误代码：{e}')
-            elif _class == 2:  # 删除目录
-                folder_name = input('请输入要删除的目录名：')
-                if os.name == 'nt':
-                    if not os.path.exists(folder_name):
-                        print('\a目录不存在')
-                        pass
-                    else:
-                        if input(f'\a确定要删除目录 {folder_name} 吗？(y/n): ') in ['y', 'Y']:
-                            os.rmdir(folder_name)
-                            print('目录已删除')
-                else:
-                    if not os.path.exists(self.where + '/' + folder_name):
-                        print('\a目录不存在')
-                        pass
-                    else:
-                        if input(f'\a确定要删除目录 {folder_name} 吗？(y/n): ') in ['y', 'Y']:
-                            os.rmdir(self.where + '/' + folder_name)
-                            print('目录已删除')
-            else:    # 切换当前目录
-                change_path = input('请输入要切换的目录：')
-                if os.name == 'nt' and ':\\' in change_path:
-                    os.chdir(change_path)
-                    self.where = change_path  # 更新当前路径
+            if os.name == 'nt' and ':\\' in change_path:
+                os.chdir(change_path)
+                self.where = change_path  # 更新当前路径
+                print('目录已切换')
+            else:
+                new_path = os.path.join(self.where, change_path)
+                if os.path.exists(new_path) and os.path.isdir(new_path):
+                    os.chdir(new_path)
+                    self.where = new_path
                     print('目录已切换')
                 else:
-                    new_path = os.path.join(self.where, change_path)
-                    if os.path.exists(new_path) and os.path.isdir(new_path):
-                        os.chdir(new_path)
-                        self.where = new_path
-                        print('目录已切换')
-                    else:
-                        print('\a目录不存在或不是有效的目录')
-        except EncodingWarning as e:
-            print(f'\a发生未知错误：{e}')
+                    print('目录不存在或不是有效的目录')
+        except Exception as e:
+            print(f'发生未知错误，错误代码：{e}')
+    
+    def mkdir(self):
+        # 创建文件夹
+        folder_name = input('请输入要创建的文件夹名：')
+        try:
+            if os.name == 'nt' and ':\\' in folder_name:
+                os.mkdir(folder_name)
+                print('文件夹已创建')
+            else:
+                os.mkdir(self.where + '/' + folder_name)
+                print('文件夹已创建')
+        except Exception as e:
+            print(f'发生未知错误，错误代码：{e}')
+
+    def rmdir(self):
+        # 删除文件夹
+        folder_name = input('请输入要删除的文件夹名：')
+        try:
+            if os.name == 'nt' and ':\\' in folder_name:
+                os.rmdir(folder_name)
+                print('文件夹已删除')
+            else:
+                os.rmdir(self.where + '/' + folder_name)
+                print('文件夹已删除')
+        except Exception as e:
+            print(f'发生未知错误，错误代码：{e}')
+    
+    def touch(self):
+        # 创建文件
+        file_name = input('请输入要创建的文件名：')
+        try:
+            if os.name == 'nt' and ':\\' in file_name:
+                with open(file_name, 'a', encoding='UTF-8') as f:           # 尽量不要是 "w" 模式，否则会清空文件
+                    f.write('')
+                    print('文件已创建')
+            else:
+                with open(self.where + '/' + file_name, 'a', encoding='UTF-8') as f:
+                    f.write('')
+                    print('文件已创建')
+        except Exception as e:
+            print(f'发生未知错误，错误代码：{e}')
+    
+    def rm(self):
+        # 删除文件
+        file_name = input('请输入要删除的文件名：')
+        try:
+            if os.name == 'nt' and ':\\' in file_name:
+                target_path = file_name
+            else:
+                target_path = os.path.join(self.where, file_name)
+            
+            if os.path.exists(target_path):
+                confirm = input(f'确定要删除文件 {file_name} 吗？(y/n): ')
+                if confirm.lower() == 'y':
+                    os.remove(target_path)
+                    print('文件已删除')
+                else:
+                    print('操作已取消')
+            else:
+                print(f'错误！文件不存在，请检查文件名是否正确')
+        except Exception as e:
+            print(f'发生未知错误，错误代码：{e}')
+
+    def cat(self):
+        # 查看文件内容
+        file_name = input('请输入要查看的文件名：')
+        try:
+            if os.name == 'nt' and ':\\' in file_name:
+                with open(file_name, 'r', encoding='UTF-8') as f:
+                    print(f.read())
+            else:
+                with open(self.where + '/' + file_name, 'r', encoding='UTF-8') as f:
+                    print(f.read())
+        except FileNotFoundError:
+            print(f'错误！文件不存在，请检查文件名是否正确')
+        except Exception as e:
+                print(f'发生未知错误，错误代码：{e}')
+    
 
     def file(self):
         # 修改或读取文件内容
@@ -153,12 +183,12 @@ class System_commands():
                 _class = int(input('1. 清除所有文本并写入文本\n2. 在文件末尾插入文本\n3. 读取文件\n\n请输入操作（1/2/3）：'))
                 _file = input('\n请输入文件名：')
             except Exception as e:
-                print(f'\a你的输入有误，错误代码：{e}，请重新输入！')
+                print(f'你的输入有误，错误代码：{e}，请重新输入！')
             else:
                 if _class in [1, 2, 3]:
                     break
                 else:
-                    print('\a你的输入有误，请重新输入！')
+                    print('你的输入有误，请重新输入！')
         # 操作
         try:
             if _class == 1:  # 清除并写入
@@ -222,9 +252,9 @@ class System_commands():
                     print('-----分界线-----')
                 print('Done!')
         except FileNotFoundError:
-            print('\a文件未找到')
+            print('文件未找到')
         except EncodingWarning as e:
-            print(f'\a发生未知错误：{e}')
+            print(f'发生未知错误：{e}')
 
     
     def run(self):
@@ -244,7 +274,7 @@ class System_commands():
     def exit(self):
         # 退出程序
         os.system('cls')
-        print("\a" + art.text2art('Bye!'))
+        print(art.text2art('Bye!'))
         time.sleep(3)
         exit(0)
 
@@ -255,7 +285,7 @@ class Show():
         self.system = system
         self.choosing = 0  # 当前所选功能
         self.show_start = False
-        self.commands = ["文件列表", "目录操作", "文件编辑", "命令执行", "刷新系统"]
+        self.commands = ["文件列表", "目录切换", "新建目录", "删除目录", "新建文件", "删除文件", "文件编辑", "命令执行", "刷新系统"]
 
     def run_command(self):
         """运行对应命令"""
@@ -270,8 +300,10 @@ class Show():
     def show_desktop(self):
         """显示主界面"""
         print_text = (f"""
-                  当前位置： {self.system.where.ljust(30)}
-                  当前版本： V 1.8
+                  +------------------------------------------------+
+                  |  当前位置： {self.system.where.ljust(30)}     |
+                  |  当前版本： V 1.7                              |
+                  +------------------------------------------------+
                     系统功能菜单：
                         """)
         
@@ -342,5 +374,5 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         System_commands().exit()
     except Exception as e:
-        print(f'\a发生未知错误，错误代码：{e}')
+        print(f'发生未知错误，错误代码：{e}')
         exit()
