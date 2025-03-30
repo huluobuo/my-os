@@ -2,6 +2,7 @@ import os
 import datetime
 import keyboard
 import time
+import art
 
 
 class Bios():  # 想不出这么写~~~
@@ -82,7 +83,7 @@ class System_commands():
         # 切换当前目录
         change_path = input('请输入要切换的目录：')
         try:
-            if os.name == 'nt' and ':\\' in change_path:     # 检测是否为完整路径·····Linux和MacOS暂不支持
+            if os.name == 'nt' and ':\\' in change_path:
                 os.chdir(change_path)
                 self.where = change_path  # 更新当前路径
                 print('目录已切换')
@@ -273,13 +274,7 @@ class System_commands():
     def exit(self):
         # 退出程序
         os.system('cls')
-        print("""
- _____  _                 _          __                       _
-|_   _|| |_   __ _  _ _  | |__ ___  / _| ___  _ _   _  _  ___(_) _ _   __ _
-  | |  | ' \ / _` || ' \ | / /(_-< |  _|/ _ \| '_| | || |(_-<| || ' \ / _` |
-  |_|  |_||_|\__,_||_||_||_\_\/__/ |_|  \___/|_|    \_,_|/__/|_||_||_|\__, |
-                                                                      |___/
-""")
+        print(art.text2art('Bye!'))
         time.sleep(3)
         exit(0)
 
