@@ -304,39 +304,35 @@ class Show():
 
     def show_desktop(self):
         """显示主界面"""
-        title = f"\033[1;34m★ {self.system.where} ★\033[0m".center(58)
-        version = f"\033[1;32mVersion 1.7\033[0m".rjust(30)
+        print_text = (f"""
+                  +------------------------------------------------+
+                  |  当前位置： {self.system.where.ljust(30)}     |
+                  |  当前版本： V 1.7                              |
+                  +------------------------------------------------+
+                    系统功能菜单：
+                        """)
         
-        print(f"""
-        \033[1;36m┏{'━'*56}┓
-        ┃{title}{version}┃
-        ┗{'━'*56}┛\033[0m
-        
-        \033[1;35m{'系统功能菜单'.center(56)}\033[0m
-        """)
-        
-        # 菜单项布局
+        # 获取所有命令并格式化显示
+        print_text += "\n"
+        # 修改菜单布局逻辑
         menu_items = []
-        for i, cmd in enumerate(self.commands):
-            color = '\033[1;33m' if i == self.choosing else '\033[0;37m'
-            item = f"{color}▶ {cmd.ljust(16)}\033[0m"
+        for i, command in enumerate(self.commands):
+            item = f"-[{command}]-".center(20) if i == self.choosing else f" {command} ".center(20)
             menu_items.append(item)
         
-        # 每行显示3个菜单项
-        for i in range(0, len(menu_items), 3):
-            row = '   '.join(menu_items[i:i+3])
-            print(f'\n{row.center(60)}')
+        # 每行显示4个菜单项
+        row_length = 4
+        for i in range(0, len(menu_items), row_length):
+            print_text += ' '.join(menu_items[i:i+row_length]) + '\n\n'
         
-        # 操作提示
-        print(f"""
-        \033[1;36m┏{'━'*56}┓
-        ┃\033[1;35m 操作说明：\033[0;36m                                    ┃
-        ┃ ← → ↑ ↓ : 切换选项   │ Enter : 执行   │ Q : 退出系统 ┃
-        ┗{'━'*56}┛\033[0m
-        """)
-        
-        # 使用光标定位避免闪烁
+        print_text += "\n" + "="*80 + "\n"
+        print_text += "操作说明:".center(80) + "\n"
+        print_text += "← → ↑ ↓ : 切换选项   |   Enter : 执行   |   Q : 退出系统".center(80)
+        print_text += "\n" + "="*80
+
+        # 使用\033[H将光标移到开头,而不是清屏
         print('\033[H', end='')
+        
         print(print_text, end='')
 
     def desktop(self):
