@@ -1,3 +1,5 @@
+My OS 2025 (C) huluobuo          | [中文简体](./README.md "中文简体") |   | [English](./en.md "English") |
+
 # My OS
 
 ![My OS Logo](os/img/logo.jpg)
@@ -66,13 +68,6 @@ my-os/
 ├── run.py                # 主程序入口
 └── requirements.txt      # 项目依赖
 ```
-
-### 核心模块说明
-
-- `mos/`: 包含系统核心功能实现
-- `steer/`: 负责用户引导和登录管理
-- `fonts/`: 存储系统使用的字体文件
-- `home/`: 用户数据和程序存储目录
 
 ## 依赖包
 
