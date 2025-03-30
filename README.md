@@ -1,6 +1,6 @@
 # My OS
 
-![My OS Logo](URL_ADDRESS![My OS Logo](os/img/logo.jpg)
+![My OS Logo](os/img/logo.jpg)
 
 这是一个基于 Python 开发的简单操作系统模拟器，提供了基本的系统功能和用户界面。该系统模拟了真实操作系统的核心功能，包括文件系统等功能。
 
@@ -36,6 +36,7 @@
 
 - Python 3.6 或更高版本  （开发时：Python 3.10 + Python 3.11）
 - Windows 7及更高版本或 Linux 操作系统  （开发时：Windows10 X64 + Windows11 X64）
+
 ## 使用方法
 
 1. 在项目根目录下运行：
