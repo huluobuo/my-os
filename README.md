@@ -1,6 +1,6 @@
 # My OS
 
-![My OS Logo](URL_ADDRESS![My OS Logo](https://github.com/huluobuo/my-os/blob/main/os/fonts/MyOS.png)
+![My OS Logo](URL_ADDRESS![My OS Logo](os/img/logo.jpg)
 
 这是一个基于 Python 开发的简单操作系统模拟器，提供了基本的系统功能和用户界面。该系统模拟了真实操作系统的核心功能，包括文件系统等功能。
 
