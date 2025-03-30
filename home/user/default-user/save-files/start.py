@@ -371,6 +371,8 @@ def main():
 if __name__ == '__main__':
     try:
         main()
+    except KeyboardInterrupt:
+        System_commands().exit()
     except Exception as e:
         print(f'发生未知错误，错误代码：{e}')
         exit()
