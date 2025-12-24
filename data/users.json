@@ -1,0 +1,8 @@
+{
+  "default": {
+    "username": "default",
+    "password": "123456",
+    "home_directory": "./home/default",
+    "permissions": ["read", "write", "execute"]
+  }
+}

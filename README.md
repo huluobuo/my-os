@@ -1,43 +1,57 @@
-My OS 2025 (C) huluobuo          | [中文简体](./README.md "中文简体") |   | [English](./en.md "English") |
-
-# My OS
+# My OS 2025 (C) huluobuo
 
 ![My OS Logo](os/img/logo.jpg)
 
-这是一个基于 Python 开发的简单操作系统模拟器，提供了基本的系统功能和用户界面。该系统模拟了真实操作系统的核心功能，包括文件系统等功能。
+这是一个基于 Python 开发的现代化操作系统模拟器，提供了完整的系统功能和用户界面。
 
 ## 功能特点
 
 ### 用户系统
-
 - 多用户支持
-- 用户登录界面
-- 密码加密存储
+- 安全的用户认证
 - 用户权限管理
+- 用户主目录隔离
 
 ### 系统功能
-
-- 文件管理系统
+- 完整的文件管理系统
+- 命令行界面
 - 系统安全机制
+- 文件加密功能
 
 ### 用户界面
-
-- 命令行界面
+- 现代化的控制台界面
 - 交互式操作
 - 用户友好的提示信息
+- 启动引导界面
 
 ## 系统要求
 
 ### 硬件要求
-
 - CPU: 1GHz 或更高
 - 内存: 至少 100MB 可用内存
 - 硬盘空间: 至少 50MB 可用空间
 
 ### 软件要求
+- Python 3.6 或更高版本
+- Windows 7及更高版本或 Linux 操作系统
 
-- Python 3.6 或更高版本  （开发时：Python 3.10 + Python 3.11）
-- Windows 7及更高版本或 Linux 操作系统  （开发时：Windows10 X64 + Windows11 X64）
+## 项目结构
+
+```
+my-os-1/
+├── src/                    # 源代码目录
+│   ├── core/              # 核心系统模块
+│   ├── auth/              # 认证和用户管理
+│   ├── system/            # 系统功能模块
+│   ├── ui/                # 用户界面模块
+│   ├── security/          # 安全功能模块
+│   └── main.py            # 主程序入口
+├── data/                  # 数据文件目录
+├── config/                # 配置文件目录
+├── home/                  # 用户主目录
+├── os/                    # 系统资源文件
+└── run.py                 # 启动脚本
+```
 
 ## 使用方法
 
@@ -46,80 +60,27 @@ My OS 2025 (C) huluobuo          | [中文简体](./README.md "中文简体") | 
    ```bash
    python run.py
    ```
+
 2. 程序会自动检查并安装所需依赖
-3. 启动后，您将看到登录界面：
+3. 启动后，您将看到登录界面
+4. 使用默认用户登录：
+   - 用户名: default
+   - 密码: 123456
 
-   - 选择用户账号(默认default_user)
-   - 输入密码（默认123456）
-   - 登录成功后即可使用系统功能
+## 开发说明
 
-## 系统架构
+### 代码规范
+- 遵循 PEP 8 代码规范
+- 使用类型注解
+- 模块化设计
+- 清晰的文档字符串
 
-### 目录结构
-
-```
-my-os/
-├── os/                   # 操作系统核心代码
-│   ├── mos/              # 系统核心模块
-│   ├── steer/            # 用户引导模块
-│   └── fonts/            # 系统字体文件
-├── home/                 # 用户目录
-│   └── program-files/    # 系统程序文件
-├── run.py                # 主程序入口
-└── requirements.txt      # 项目依赖
-```
-
-## 依赖包
-
-- cryptography==42.0.5   # 用于密码加密
-- art==6.1               # 用于ASCII艺术显示
-- pygame==2.5.2          # 用于图形界面（V1.5）
-- psutil==5.9.8          # 用于系统资源监控
-- keyboard==0.13.5       # 用于键盘输入处理
-
-## 安全特性
-
-- 用户密码加密存储
-- 系统密钥管理
-- 安全的用户认证机制
-
-## 注意事项
-
-- 首次运行时会自动安装所需依赖
-- 如遇到问题，请检查：
-  - Python 版本是否符合要求
-  - 依赖包是否安装成功
-  - 系统权限是否足够(一般不需要额外权限)
-
-## 开发计划
-
-- [ ] 添加更多系统工具
-- [ ] 优化用户界面
-- [ ] 增加网络功能
-- [ ] 添加更多安全特性
+### 扩展功能
+项目采用模块化设计，可以轻松添加新功能：
+1. 在相应模块中添加新类
+2. 更新配置文件
+3. 集成到主程序中
 
 ## 许可证
 
-本项目采用 MIT 许可证
-
-MIT License
-
-Copyright (c) 2025 huluobuo
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+版权所有 (C) huluobuo 保留所有权利。
